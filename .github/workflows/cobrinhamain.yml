@@ -2,34 +2,35 @@ name: Update Snake Animation
 
 on:
   schedule:
-    - cron: "0 */6 * * *"  # roda a cada 6 horas
-  workflow_dispatch:        # permite rodar manualmente
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
 
 jobs:
   update-snake:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Clona o repositório
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # 2️⃣ Gera o SVG da cobrinha
-      - name: Generate Snake SVG
+      - name: Generate Snake SVG (dark mode)
         uses: Platane/snk@v3
         with:
           github_user_name: paulohassad
           outputs: dist/github-contribution-grid-snake.svg
           theme: dark
 
-      # 3️⃣ Copia para pasta do README
-      - name: Copy snake to assets
+      - name: Copy SVG to assets
         run: |
           mkdir -p assets
           cp dist/github-contribution-grid-snake.svg assets/github-contribution-grid-snake.svg
 
-      # 4️⃣ Commit e push usando o GITHUB_TOKEN do bot
       - name: Commit & Push
+        run: |
+          git add README.md assets/github-contribution-grid-snake.svg
+          git commit -m "Update snake animation" || echo "No changes to commit"
+          git push https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/paulohassad/paulohassad.git HEAD:main
+
         run: |
           git add README.md assets/github-contribution-grid-snake.svg
           git commit -m "Update snake animation" || echo "No changes to commit"
