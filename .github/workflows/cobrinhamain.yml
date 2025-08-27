@@ -1,9 +1,9 @@
 name: GitHub Snake
 
 on:
-  schedule:           # roda a cada 6 horas
-    - cron: "0 */6 * * *"
-  workflow_dispatch:   # permite rodar manualmente
+  schedule:
+    - cron: "0 */6 * * *"  # roda a cada 6 horas
+  workflow_dispatch:        # permite rodar manualmente
 
 jobs:
   generate-snake:
@@ -12,22 +12,18 @@ jobs:
       # 1️⃣ Faz checkout do repositório
       - uses: actions/checkout@v4
 
-      # 2️⃣ Gera a cobrinha com o usuário paulohassad
+      # 2️⃣ Gera a cobrinha para seu usuário paulohassad
       - uses: Platane/snk@v3
         with:
-          # github user name to read the contribution graph from
           github_user_name: paulohassad
-
-          # arquivos a gerar
           outputs: |
-            dist/github-snake.svg
-            dist/github-snake-dark.svg?palette=github-dark
-            dist/ocean.gif?color_snake=orange&color_dots=#bfd6f6,#8dbdff,#64a1f4,#4b91f1,#3c7dd9
+            github-snake.svg
+            github-snake-dark.svg?palette=github-dark
 
-      # 3️⃣ Comita e envia as alterações geradas pelo workflow
+      # 3️⃣ Comita e envia as alterações para a branch principal
       - name: Commit and push changes
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "Update GitHub Snake contributions"
           branch: main
-          file_pattern: "dist/**"
+          file_pattern: "*.svg"
