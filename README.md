@@ -23,6 +23,6 @@ Here are some ideas to get you started:
 - ⚡ Fun fact: ...
 -->
 
-![Snake animation](assets/github-contribution-grid-snake.svg)
+![Snake animation](https://raw.githubusercontent.com/paulohassad/paulohassad/main/assets/github-contribution-grid-snake.svg)
 
 
