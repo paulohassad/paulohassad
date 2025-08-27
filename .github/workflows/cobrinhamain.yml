@@ -1,38 +1,20 @@
-name: Update GitHub Snake GIF Dark Mode
+- uses: Platane/snk@v3
+  with:
+    # github user name to read the contribution graph from (**required**)
+    # using action context var `github.repository_owner` or specified user
+    github_user_name: paulohassad
 
-on:
-  schedule:
-    - cron: "0 */6 * * *"   # Executa a cada 6 horas
-  workflow_dispatch:        # Permite rodar manualmente
+    # list of files to generate.
+    # one file per line. Each output can be customized with options as query string.
+    #
+    #  supported options:
+    #  - palette:     A preset of color, one of [github, github-dark, github-light]
+    #  - color_snake: Color of the snake
+    #  - color_dots:  Coma separated list of dots color.
+    #                 The first one is 0 contribution, then it goes from the low contribution to the highest.
+    #                 Exactly 5 colors are expected.
+    outputs: |
+      dist/github-snake.svg
+      dist/github-snake-dark.svg?palette=github-dark
+      dist/ocean.gif?color_snake=orange&color_dots=#bfd6f6,#8dbdff,#64a1f4,#4b91f1,#3c7dd9
 
-jobs:
-  generate-snake-gif:
-    runs-on: ubuntu-latest
-
-    steps:
-      # 1️⃣ Clona o repositório
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # 2️⃣ Gera o GIF da cobrinha dark mode
-      - name: Generate Snake GIF (dark mode)
-        uses: Platane/snk@v3
-        with:
-          github_user_name: paulohassad        # seu usuário
-          outputs: |
-            dist/github-snake-dark.gif?palette=github-dark&color_dots=#1a1a1a&color_snake=00FF00
-
-      # 3️⃣ Copia o GIF para a pasta assets
-      - name: Copy GIF to assets
-        run: |
-          mkdir -p assets
-          cp dist/github-snake-dark.gif assets/github-snake-dark.gif
-
-      # 4️⃣ Commit e push do GIF atualizado
-      - name: Commit & Push
-        run: |
-          git config user.name "GitHub Actions"
-          git config user.email "actions@github.com"
-          git add assets/github-snake-dark.gif
-          git commit -m "Update GitHub snake GIF dark mode" || echo "No changes to commit"
-          git push
